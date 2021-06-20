@@ -2,7 +2,7 @@
 component.dependencies = {"theme"}
 component.namespace = "anchor"
 component.title = "Anchor"
-component.debug = false
+component.debug = true
 
 component.drawings = {}
 
@@ -55,6 +55,11 @@ function component:DoDraw(tbl)
 	modifyY = tbl.modifyY
 	anchorX = ScrW() / 2 - ScrW() / 2 * modifyX
 	anchorY = ScrH() / 2 - ScrH() / 2 * modifyY
+
+	local punch = LocalPlayer():GetViewPunchAngles()
+	anchorX = anchorX + punch.y * galactic.theme.rem / 4
+	anchorY = anchorY - punch.p * galactic.theme.rem / 4
+
 	self:DrawDebug(anchorX, anchorY)
 
 	if tbl.init then
