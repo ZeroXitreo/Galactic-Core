@@ -21,16 +21,70 @@ function component:Constructor()
 		return self.bgColor
 	end
 	function PANEL:Paint(w, h)
-		local alpha = 200
+		local bgcolor = self:GetBackgroundColor()
+		local fgcolor = self:GetColor()
+		local alpha = 255
 
-		if self:IsHovered() and not self:IsDown() then
-			alpha = 255
+		if self:IsEnabled() then
+			if self:IsHovered() and not self:IsDown() then
+				bgcolor = galactic.theme:Blend(bgcolor, galactic.theme.colors.text, .1)
+			end
+		else
+			alpha = 55
 		end
 
-		draw.RoundedBox(galactic.theme.round, 0, 0, w, h, ColorAlpha(self:GetBackgroundColor(), alpha))
-		self:SetColor(ColorAlpha(self:GetColor(), alpha))
+		draw.RoundedBox(galactic.theme.round, 0, 0, w, h, ColorAlpha(bgcolor, alpha))
+		self:SetColor(ColorAlpha(fgcolor, alpha))
 	end
 	vgui.Register("GaButton", PANEL, "DButton")
+
+	/////////////////////////////////////////////////
+
+	local PANEL = {}
+	function PANEL:Init()
+		self.AddSheetSuper = self.AddSheet
+		self.AddSheet = function(name, pnl, icon, noStretchX, noStretchY, tooltip)
+			local tbl = self.AddSheetSuper(name, pnl, icon, noStretchX, noStretchY, tooltip)
+			local tab = tbl["Tab"]
+			tab:SetTextColor(galactic.theme.colors.block)
+			tab.Paint = function(this, x, y)
+				local txtCol = galactic.theme.colors.textFaint
+				local bgCol = galactic.theme.colors.block
+				if tab:IsActive() then
+					txtCol = galactic.theme.colors.text
+				else
+					bgCol = galactic.theme:Blend(galactic.theme.colors.blockFaint, galactic.theme.colors.textFaint, .2)
+				end
+				draw.RoundedBoxEx(galactic.theme.round, 0, 0, x, y, bgCol, true, true, false, false)
+				tab:SetTextColor(txtCol)
+			end
+			return tbl
+		end
+
+	end
+	function PANEL:Paint(x, y)
+		local topPush = 20
+		draw.RoundedBox(galactic.theme.round, 0, topPush, x, y - topPush, galactic.theme.colors.block)
+	end
+	/*self.TabContainer.AddSheetSuper = self.TabContainer.AddSheet
+	self.TabContainer.AddSheet = function(name, pnl, icon, noStretchX, noStretchY, tooltip)
+		local tbl = self.TabContainer.AddSheetSuper(name, pnl, icon, noStretchX, noStretchY, tooltip)
+		local tab = tbl["Tab"]
+		tab:SetTextColor(galactic.theme.colors.block)
+		tab.Paint = function(this, x, y)
+			local txtCol = galactic.theme.colors.textFaint
+			local bgCol = galactic.theme.colors.block
+			if tab:IsActive() then
+				txtCol = galactic.theme.colors.text
+			else
+				bgCol = galactic.theme:Blend(galactic.theme.colors.blockFaint, galactic.theme.colors.textFaint, .2)
+			end
+			draw.RoundedBoxEx(galactic.theme.round, 0, 0, x, y, bgCol, true, true, false, false)
+			tab:SetTextColor(txtCol)
+		end
+		return tbl
+	end*/
+	vgui.Register("GaPropertySheet", PANEL, "DPropertySheet")
 
 	/////////////////////////////////////////////////
 
@@ -112,14 +166,14 @@ function component:Constructor()
 
 	/////////////////////////////////////////////////
 
-	if LocalPlayer():IsValid() then
+	/*if LocalPlayer():IsValid() then
 		self:Boolean("Boolean", "Description", function(result)
 			print(result)
 		end)
 		self:String("String", "Description", function(result)
 			print(result)
 		end, "Okay", "Placeholder", "Inserted value")
-	end
+	end*/
 end
 
 function component:String(title, message, func, ok, placeholder, value)

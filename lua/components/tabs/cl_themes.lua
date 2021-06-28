@@ -88,9 +88,8 @@ function component:InitializeTab(parent)
 		end
 	end
 
-	self.container = vgui.Create("DPanel", parent)
+	self.container = vgui.Create("Panel", parent)
 	self.container:Dock(FILL)
-	self.container.Paint = nil
 
 	self.container.menu = vgui.Create("DPanel", self.container)
 	self.container.menu:Dock(LEFT)
@@ -105,8 +104,18 @@ function component:InitializeTab(parent)
 
 	self.container.menu.themes.OnRowSelected = function(lst, index, pnl) self:OnThemeSelected(index, pnl) end
 
-	self.container.menu.deleteTheme = self:CreateMenuButton("Delete")
-	self.container.menu.deleteTheme.DoClick = function() self:OnDeleteTheme() end
+	self.container.menu.deleteTheme = self.container.menu:Add("GaButton")
+	self.container.menu.deleteTheme:Dock(BOTTOM)
+	self.container.menu.deleteTheme:DockMargin(0, 6, 0, 0)
+	self.container.menu.deleteTheme:SetText("Delete")
+	self.container.menu.deleteTheme:SetBackgroundColor(galactic.theme.colors.red)
+	self.container.menu.deleteTheme.DoClick = function()
+		galactic.io:Boolean("Remove theme", "Are you sure you want to remove this theme?", function(result)
+			if result then
+				self:OnDeleteTheme()
+			end
+		end)
+	end
 
 	self.container.menu.saveAs = self:CreateMenuButton("Save as..")
 	self.container.menu.saveAs.DoClick = function() self:OnSaveAs() end
@@ -122,7 +131,6 @@ function component:InitializeTab(parent)
 
 	self.container.editorPanel = self.container:Add("DPanel")
 	self.container.editorPanel:Dock(FILL)
-	self.container.editorPanel:DockMargin(0, 0, 8, 0)
 
 	self.container.palette = self.container.editorPanel:Add("DPanel")
 	self.container.palette:Dock(TOP)
@@ -204,9 +212,8 @@ function component:InitAllThemes()
 end
 
 function component:CreateMenuButton(txt)
-	local button = vgui.Create("DButton", self.container.menu)
+	local button = vgui.Create("GaButton", self.container.menu)
 	button:Dock(BOTTOM)
-	button:SetTall(24)
 	button:DockMargin(0, 6, 0, 0)
 	button:SetText(txt)
 	return button

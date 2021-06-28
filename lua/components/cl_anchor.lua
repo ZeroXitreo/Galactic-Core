@@ -2,7 +2,7 @@
 component.dependencies = {"theme"}
 component.namespace = "anchor"
 component.title = "Anchor"
-component.debug = true
+component.debug = false
 
 component.drawings = {}
 
