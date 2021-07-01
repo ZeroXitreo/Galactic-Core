@@ -1,7 +1,7 @@
 if SERVER then
-	AddCSLuaFile("includes/modules/core.lua")
+	AddCSLuaFile("core.lua")
 end
-require("core")
+include("core.lua")
 
 
 local function IncludeDirectory(dir)
