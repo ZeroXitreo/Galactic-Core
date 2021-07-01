@@ -1,7 +1,7 @@
 {
-	"title"		:	"Galactic Core",
+	"title"		:	"Galactic Core [Framework]",
 	"type"		:	"ServerContent",
-	"tags"		:	[  ],
+	"tags"		:	[ "Build" ],
 	"ignore"	:
 	[
 		"*.psd",
@@ -12,6 +12,7 @@
 		"LICENSE",
 		"*.md",
 		"icon.jpg",
+		"icon.png",
 		".gitattributes"
 	]
 }
