@@ -26,7 +26,6 @@ galactic = {}
 galactic.registeredComponents = {}
 galactic.components = {}
 galactic.initialized = false
-galactic.registry = debug.getregistry()
 local border = "="
 local prefix = "GA > "
 
